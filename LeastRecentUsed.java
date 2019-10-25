@@ -3,7 +3,7 @@ package trabalhoso;
 /**
  * Classe com a política de Substituição de Páginas com Escopo Global
  */
-public static class LeastRecentUsed {
+public class LeastRecentUsed {
 
     /**
      * Escolhe qual quadro será substituído com a página que será carregada na MP, de acordo com a
@@ -16,13 +16,14 @@ public static class LeastRecentUsed {
         /* TODO identificar/alterar o tipo do parâmetro quadros*/
         /* TODO um método identificaPagina(int bloco) => tabelaPaginas[i], bloco <=> pagina */
         int iMenor = 0;
-        int vMenor = identificaPagina(quadros[0]).ultimaReferencia;
-        int candidato = 0;
+        int vMenor = identificaPagina(quadros[0]).getUltimaReferencia;
+        int candidato;
         for (int i = 1; i < quadros.length; i++) {
             candidato = identificaPagina(quadros[i]).getUltimaReferencia;
-            if (candidato < vMenor):
+            if (candidato < vMenor) {
                 vMenor = candidato;
                 iMenor = i;
+            }
         }
         return iMenor;
     }
