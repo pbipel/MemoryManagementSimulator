@@ -8,15 +8,14 @@ package trabalhoso;
 /**
  *
  * @author Camilla
+ * Classe processo
  */
 public class Processo 
 {
-    private String[] paginas;
+    private int[] paginas;
     private int tamanhoProcesso;
-    private int idProcesso;
-    
-    private int tempoInicial;
-    private int tempoFinal;
+    private static int ID_PROCESSO_GERAL = 0;
+    private int idProcesso;   
     
     private String nomeProcesso;   
     private String estadoProcesso; //NOVO - PRONTO - EXECUTANDO - BLOQUEADO - EXIT
@@ -25,33 +24,35 @@ public class Processo
     
     public Processo(int tamanhoProcesso, String nomeProcesso)
     {
-        paginas = new String[tamanhoProcesso]; //cada pagina tem tamanho 1
+        paginas = new int[tamanhoProcesso]; //cada pagina tem tamanho 1
         this.tamanhoProcesso = tamanhoProcesso;
-        idProcesso = 1; //fazer função para colocar ids incrementando nos processos;
-        
-        tempoInicial = 0; //fazer função para colocar tempo inicial
-        tempoFinal = 0; //fazer função para colocar tempo final
+        ID_PROCESSO_GERAL++;
+        idProcesso = ID_PROCESSO_GERAL;
         
         this.nomeProcesso = nomeProcesso;
         estadoProcesso = "NOVO";
-        processoSuspenso = false;       
+        processoSuspenso = false;                  
         
         encherProcesso();
     }
     
-    //criar valores para cada página do processo que é o nome do processo + índice
+    /**
+    *
+    * 
+    * cria valores para cada página do processo que é o nome do processo + índice
+    */
     private void encherProcesso()
     {
-        for(int i=0;i<tamanhoProcesso;i++) //< ou <= ?
-            paginas[i] = nomeProcesso + "paginas[i]";
+        for(int i=0;i<tamanhoProcesso;i++)       
+            paginas[i] = idProcesso*i + 100;                  
     }
     
     public void setEstadoProcesso(String estado)
     {
         estadoProcesso = estado;
     }
-    
-    public String getPaginas(int i)
+
+    public int getPaginas(int i)
     {
         return paginas[i];
     }
@@ -61,9 +62,19 @@ public class Processo
         return idProcesso;
     }
     
-    //fazer funções de gets que precisar
+    public String getNomeProcesso()
+    {
+        return nomeProcesso;
+    }
     
-    //paginas do processo
-    //cada págima tem INDICE E CONTEUDO
-    //processo tem TAMANHO
+    public int getTamanhoProcesso()
+    {
+        return tamanhoProcesso;
+    }
+    
+    public String getEstadoProcesso()
+    {
+        return estadoProcesso;
+    }
+    
 }

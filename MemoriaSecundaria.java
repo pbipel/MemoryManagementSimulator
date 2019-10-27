@@ -6,31 +6,70 @@
 package trabalhoso;
 
 /**
- *
+ * Memoria Secundaria
  * @author Camilla
  */
 public class MemoriaSecundaria 
 {
-    private static final int tamanhoMS = 200;
+    private static final int TAMANHO_MS = 5;
     Processo[] processos;
     
     public MemoriaSecundaria()
     {
-        processos = new Processo[tamanhoMS];  
+        processos = new Processo[TAMANHO_MS];  
         encherMS();
     }
     
+    /**
+    *
+    * Coloca valores null na MS
+    */
     private void encherMS()
     {
-        for(int i=0;i<tamanhoMS;i++)
+        for(int i=0;i<TAMANHO_MS;i++)
             processos[i] = null;           
     }
     
-    public void colocaProcessoMS(Processo p)
+    /**
+    *
+    * Pega um processo e o coloca na MS
+    * @param p o processo
+    * @return j a localização do processo na MS
+    */
+    public int colocaProcessoMS(Processo p)
     {
-        for(int i=0;i<tamanhoMS;i++)       
-            if(processos[i]==null)          
-                processos[i] = p;                   
+        int j=0;
+        
+        for(int i=0;i<TAMANHO_MS;i++)
+        {
+            if(processos[i]==null)
+            {
+                processos[i] = p;
+                j = i;
+                break;
+            }
+        }
+        return j;                                                        
     }
     
+    /**
+    *
+    * Exibe o processo, tamanho e id do mesmo que está na MS
+    */
+    public void exibeEstadoMS()
+    {
+        System.out.printf("\n-- STATUS DA MS - Tamanho: %d -- \n", TAMANHO_MS);
+        for(int i=0;i<TAMANHO_MS;i++)
+        {
+            if(processos[i]!=null)
+            {
+                System.out.printf("\n| =============== |\n");
+                System.out.printf("| %s ID: %d tam: %d |\n", 
+                        processos[i].getNomeProcesso(), processos[i].getIdProcesso(), 
+                        processos[i].getTamanhoProcesso());
+                System.out.printf("| =============== |\n");
+            }            
+        }
+    }
+ 
 }
