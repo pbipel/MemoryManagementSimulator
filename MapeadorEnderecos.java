@@ -38,4 +38,16 @@ public class MapeadorEnderecos{
         return endRelativo % tamBloco;
     }
 
+    /**
+     * Identifica o endereço real de um endereço relativo na MP .
+     *
+     * @param numBloco Número do bloco na MP, onde a página do endereço relativo se encontra.
+     * @param tamBloco Tamanho de um bloco no sistema em Bytes.
+     * @param offset Tamanho de deslocamento dentro do bloco.
+     * @return Endereço real associado ao endereço relativo.
+     */
+    public static int calcularEnderecoReal(int numBloco, int tamBloco, int offset) {
+        return numBloco * tamBloco + offset;
+    }
+
 }
