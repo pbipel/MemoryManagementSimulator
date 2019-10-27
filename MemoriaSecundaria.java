@@ -11,51 +11,26 @@ package trabalhoso;
  */
 public class MemoriaSecundaria 
 {
-    private static final int TAMANHO_MS = 5;
+    private static final int tamanhoMS = 200;
     Processo[] processos;
     
     public MemoriaSecundaria()
     {
-        processos = new Processo[TAMANHO_MS];  
+        processos = new Processo[tamanhoMS];  
         encherMS();
     }
     
     private void encherMS()
     {
-        for(int i=0;i<TAMANHO_MS;i++)
+        for(int i=0;i<tamanhoMS;i++)
             processos[i] = null;           
     }
     
-    public int colocaProcessoMS(Processo p)
+    public void colocaProcessoMS(Processo p)
     {
-        int j=0;
-        
-        for(int i=0;i<TAMANHO_MS;i++)
-        {
-            if(processos[i]==null)
-            {
-                processos[i] = p;
-                j = i;
-                break;
-            }
-        }
-        return j;                                                        
+        for(int i=0;i<tamanhoMS;i++)       
+            if(processos[i]==null)          
+                processos[i] = p;                   
     }
     
-    public void exibeEstadoMS()
-    {
-        System.out.printf("\n-- STATUS DA MS - Tamanho: %d -- \n", TAMANHO_MS);
-        for(int i=0;i<TAMANHO_MS;i++)
-        {
-            if(processos[i]!=null)
-            {
-                System.out.printf("\n| =============== |\n");
-                System.out.printf("| %s ID: %d tam: %d |\n", 
-                        processos[i].getNomeProcesso(), processos[i].getIdProcesso(), 
-                        processos[i].getTamanhoProcesso());
-                System.out.printf("| =============== |\n");
-            }            
-        }
-    }
- 
 }

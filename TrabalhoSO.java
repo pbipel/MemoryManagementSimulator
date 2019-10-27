@@ -22,10 +22,10 @@ public class TrabalhoSO
         Scanner input = new Scanner(System.in);      
         GerenciadorMemoria GM = new GerenciadorMemoria();               
         
+        //loop para exibir as coisas que a professora quer, junto do menu
+        
         while(c!=8)
         {
-            GM.statusMemorias();
-                    
             System.out.printf("\nOpções:\n");
             System.out.printf("\n1- C - Submeter um processo.");
             System.out.printf("\n2- ");
@@ -45,18 +45,12 @@ public class TrabalhoSO
                 System.out.printf("\nDigite o nome do processo: ");
                 nomeP = input.next();
                 
-                System.out.printf("Digite o tamanho do processo: ");
+                System.out.printf("\nDigite o tamanho do processo: ");
                 tamP = input.nextInt();
                 
-                GM.criaProcesso(tamP,nomeP);
-                
-                System.out.printf("\nO processo foi criado com sucesso.\n");                
+                GM.criaProcesso(tamP, nomeP);
             }
-            
-            else
-                System.exit(0);
-            
-           GM.aumentaRelogio();
+           
         }
     }
     

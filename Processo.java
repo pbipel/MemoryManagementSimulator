@@ -13,7 +13,6 @@ public class Processo
 {
     private String[] paginas;
     private int tamanhoProcesso;
-    private static int ID_PROCESSO_GERAL = 0;
     private int idProcesso;
     
     private int tempoInicial;
@@ -24,14 +23,13 @@ public class Processo
     private boolean processoSuspenso; 
     //true e pronto = SUSPENSO - PRONTO, true e bloqueado = SUSPENSO - BLOQUEADO      
     
-    public Processo(int tamanhoProcesso, String nomeProcesso, int tempoInicial)
+    public Processo(int tamanhoProcesso, String nomeProcesso)
     {
         paginas = new String[tamanhoProcesso]; //cada pagina tem tamanho 1
         this.tamanhoProcesso = tamanhoProcesso;
-        ID_PROCESSO_GERAL++;
-        idProcesso = ID_PROCESSO_GERAL;
+        idProcesso = 1; //fazer função para colocar ids incrementando nos processos;
         
-        this.tempoInicial = tempoInicial; //fazer função para colocar tempo inicial
+        tempoInicial = 0; //fazer função para colocar tempo inicial
         tempoFinal = 0; //fazer função para colocar tempo final
         
         this.nomeProcesso = nomeProcesso;
@@ -41,7 +39,7 @@ public class Processo
         encherProcesso();
     }
     
-    //cria valores para cada página do processo que é o nome do processo + índice
+    //criar valores para cada página do processo que é o nome do processo + índice
     private void encherProcesso()
     {
         for(int i=0;i<tamanhoProcesso;i++) //< ou <= ?
@@ -53,7 +51,6 @@ public class Processo
         estadoProcesso = estado;
     }
     
-    //rever isso
     public String getPaginas(int i)
     {
         return paginas[i];
@@ -64,21 +61,7 @@ public class Processo
         return idProcesso;
     }
     
-    public String getNomeProcesso()
-    {
-        return nomeProcesso;
-    }
-    
-    public int getTamanhoProcesso()
-    {
-        return tamanhoProcesso;
-    }
-    
-    public String getEstadoProcesso()
-    {
-        return estadoProcesso;
-    }
-    
+    //fazer funções de gets que precisar
     
     //paginas do processo
     //cada págima tem INDICE E CONTEUDO
