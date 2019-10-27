@@ -80,6 +80,12 @@ public class MemoriaPrincipal
         
     }
     
+    //AQUI - Fazer função para remover o processo da MP
+    public void removeProcessoMP(Processo p)
+    {
+        
+    }
+    
     /**
     *
     * Exibe as páginas do processo que estão na MP

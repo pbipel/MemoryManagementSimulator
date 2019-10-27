@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package trabalhoso;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -18,20 +20,18 @@ public class Processo
     private int idProcesso;   
     
     private String nomeProcesso;   
-    private String estadoProcesso; //NOVO - PRONTO - EXECUTANDO - BLOQUEADO - EXIT
-    private boolean processoSuspenso; 
-    //true e pronto = SUSPENSO - PRONTO, true e bloqueado = SUSPENSO - BLOQUEADO      
+    private String estadoProcesso; 
+    //NOVO - PRONTO - EXECUTANDO - BLOQUEADO - SUSPENSO_PRONTO - SUSPENSO_BLOQUEADO  
     
     public Processo(int tamanhoProcesso, String nomeProcesso)
     {
         paginas = new int[tamanhoProcesso]; //cada pagina tem tamanho 1
         this.tamanhoProcesso = tamanhoProcesso;
         ID_PROCESSO_GERAL++;
-        idProcesso = ID_PROCESSO_GERAL;
+        idProcesso = ID_PROCESSO_GERAL;      
         
         this.nomeProcesso = nomeProcesso;
-        estadoProcesso = "NOVO";
-        processoSuspenso = false;                  
+        estadoProcesso = "NOVO";               
         
         encherProcesso();
     }
@@ -46,7 +46,7 @@ public class Processo
         for(int i=0;i<tamanhoProcesso;i++)       
             paginas[i] = idProcesso*i + 100;                  
     }
-    
+
     public void setEstadoProcesso(String estado)
     {
         estadoProcesso = estado;

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
 
+
 /**
  *
  * Gerenciador de Memória, tem instância da MP e MS, e basicamente admistra os processos
@@ -18,18 +19,30 @@ public class GerenciadorMemoria
     private Map<Integer,Processo> listaProcessosCriados; //aqui o processo esta na MS
     private Map<Integer,Processo> listaProcessosAlocados; //aqui o processo esta na MP 
     private Map<Integer,Processo> listaProcessosExecutando;
+    private Map<Integer,Processo> listaProcessosBloqueados;
+    private Map<Integer,Processo> listaProcessosSuspensoB;
+    private Map<Integer,Processo> listaProcessosSuspensoP;
+    
     private Map<Integer,int[]> TPE;
     private Map<Integer,Integer> ondeEstaMeuProcessoNaMS;
-    private MemoriaPrincipal MP = new MemoriaPrincipal();
-    private MemoriaSecundaria MS = new MemoriaSecundaria(); 
+    
+    private MemoriaPrincipal MP;
+    private MemoriaSecundaria MS; 
     
     public GerenciadorMemoria()
     {         
         listaProcessosCriados = new HashMap<>();
         listaProcessosAlocados = new HashMap<>();
         listaProcessosExecutando = new HashMap<>();
+        listaProcessosBloqueados = new HashMap<>();
+        listaProcessosSuspensoB = new HashMap<>();
+        listaProcessosSuspensoP = new HashMap<>();
+        
         TPE = new HashMap<>();
         ondeEstaMeuProcessoNaMS = new HashMap<>();
+        
+        MP = new MemoriaPrincipal();
+        MS = new MemoriaSecundaria();
     }   
     
     /**
@@ -74,46 +87,112 @@ public class GerenciadorMemoria
     
     /**
     *
-    * Coloca o processo criado na fila de prontos
+    * Coloca o processo criado na fila de prontos, só trás 1 página do processo
     * @param p processo
     */
     private void admiteProcesso(Processo p)
     {   
-        int quadro=0, paginasNaMP=0, ultPagina=0;
-        boolean pPronto=false, pIteracao=true;
-        
-        for(int i=0;i<p.getTamanhoProcesso();i++)
+        int quadro=0;
+
+        if(!(MP.getMPestaCheia()) && (listaProcessosCriados.size()>0))
         {
-            if(!(MP.getMPestaCheia()) && (listaProcessosCriados.size()>0) && (pIteracao))
-            {
-                System.out.printf("\nMP não está cheia!");
-                System.out.printf("\nPage Fault. Não tem nenhuma página do processo na MP [...] "
-                    + "O Processo está sendo admitido (NOVO->PRONTO).\n");
-                listaProcessosAlocados.put(p.getIdProcesso(),p); //coloca processo no map
-                quadro = MP.colocaProcessoMP(p,i);                  
-                criaTPE(p,quadro,i); 
-                pPronto = true;
-                System.out.printf("\nFoi trazida uma página do processo para a MP.\n");
-                pIteracao=false;
-            }
-            else if((!pIteracao) && !(MP.getMPestaCheia()) && (paginasNaMP<3))
-            {
-                System.out.printf("\nMP não está cheia! Pode trazer mais páginas para a MP.");
-                quadro = MP.colocaProcessoMP(p,i);
-                //criaTPE(p,quadro,i); fazer função de modificar a tpe então
-                System.out.printf("\nFoi trazida uma página do processo para a MP.\n");
-                paginasNaMP++;
-            }
-            else
-                System.out.printf("\nMP está cheia!\n"); //fazer função de substituição
-        }
-        if(pPronto)
-        {            
+            System.out.printf("\nMP não está cheia!");
+            System.out.printf("\nPage Fault. Não tem nenhuma página do processo na MP [...] "
+                + "O Processo está sendo admitido (NOVO->PRONTO).\n");
+            listaProcessosAlocados.put(p.getIdProcesso(),p); //coloca processo no map
+            quadro = MP.colocaProcessoMP(p,0);                  
+            criaTPE(p,quadro,0); 
+            System.out.printf("\nFoi trazida uma página do processo para a MP.\n");
             p.setEstadoProcesso("PRONTO");
             System.out.printf("\nO Processo foi admitido (NOVO->PRONTO).\n");
         }
+        else
+        {
+            System.out.printf("\nMP está cheia!\n");
+            //AQUI: chamar função suspendeProcesso
+            //e escolher o processo que vai ser removido
+        }
+                   
+    }
+    
+    /**
+     * Coloca processo na lista de processos sendo executados no momento
+     * Pode executar vários processos
+     * @param p Processo
+     */
+    public void executaProcesso(Processo p)
+    {
+        if(p.getEstadoProcesso().equals("PRONTO"))
+        {
+            listaProcessosAlocados.remove(p.getIdProcesso());
+            listaProcessosExecutando.put(p.getIdProcesso(),p);
+            p.setEstadoProcesso("EXECUTANDO");
+        }
+    }
+    
+    public void terminaProcesso(Processo p)
+    {
+        //AQUI: também atualizar a TPE nos ifs, o bit presença e o bit modificação
+        if(p.getEstadoProcesso().equals("PRONTO"))
+        {
+            listaProcessosAlocados.remove(p.getIdProcesso());
+            MP.removeProcessoMP(p);
+            p.setEstadoProcesso("EXIT");
+            
+        }           
+        else if(p.getEstadoProcesso().equals("EXECUTANDO"))
+        {
+            listaProcessosExecutando.remove(p.getIdProcesso());
+            MP.removeProcessoMP(p);
+            p.setEstadoProcesso("EXIT");
+        }
             
     }
+    
+    //AQUI - precisa da leitura/escrita
+    public void BloqueiaProcesso(Processo p)
+    {
+        if(p.getEstadoProcesso().equals("EXECUTANDO"))
+        {
+            listaProcessosExecutando.remove(p.getIdProcesso());
+            listaProcessosBloqueados.put(p.getIdProcesso(),p);
+            p.setEstadoProcesso("BLOQUEADO");
+        }
+    }
+    
+    private void suspendeProcesso(Processo p)
+    {
+        //AQUI - Atualizar TPE - precisa fazer um método de atualizar a tpe
+        //e em todos os ifs atualizar o bit de presença e modificação
+        if(p.getEstadoProcesso().equals("PRONTO"))
+        {
+            listaProcessosAlocados.remove(p.getIdProcesso());
+            listaProcessosSuspensoP.put(p.getIdProcesso(),p);
+            MP.removeProcessoMP(p);
+            p.setEstadoProcesso("SUSPENSO_BPRONTO");
+        }
+        else if(p.getEstadoProcesso().equals("EXECUTANDO"))
+        {
+            listaProcessosExecutando.remove(p.getIdProcesso());
+            listaProcessosSuspensoP.put(p.getIdProcesso(),p);
+            MP.removeProcessoMP(p);
+            p.setEstadoProcesso("SUSPENSO_PRONTO");
+        }
+        else if(p.getEstadoProcesso().equals("BLOQUEADO"))
+        { 
+            listaProcessosBloqueados.remove(p.getIdProcesso());
+            listaProcessosSuspensoB.put(p.getIdProcesso(),p);
+            MP.removeProcessoMP(p);
+            p.setEstadoProcesso("SUSPENSO_BLOQUEADO");
+        }
+        
+    }
+    
+    private void atualizaTPE()
+    {
+        
+    }
+    
     
     /**
      * Cria tabela de páginas de cada processo
@@ -135,4 +214,16 @@ public class GerenciadorMemoria
         TPE.put(p.getIdProcesso(),valoresNaTPE);       
     }
     
+    public static void main(String[] args) 
+    {      
+        GerenciadorMemoria GM = new GerenciadorMemoria();    
+        
+        GM.statusMemorias();
+        
+        GM.criaProcesso(10,"P1");
+        GM.criaProcesso(20,"P2");
+        GM.criaProcesso(30,"P3");
+        
+        GM.statusMemorias();
+    }
 }

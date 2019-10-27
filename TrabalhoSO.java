@@ -28,12 +28,6 @@ public class TrabalhoSO
                     
             System.out.printf("\nOpções:\n");
             System.out.printf("\n1- C - Submeter um processo.");
-            System.out.printf("\n2- ");
-            System.out.printf("\n3- ");
-            System.out.printf("\n4- ");
-            System.out.printf("\n5- ");
-            System.out.printf("\n6- ");
-            System.out.printf("\n7- ");
             System.out.printf("\n8- Sair.\n\n");
             c = input.nextInt();
             
