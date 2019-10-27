@@ -26,4 +26,16 @@ public class MapeadorEnderecos{
     public static int identificarPaginaEndereco(int endRelativo, int tamBloco) {
         return endRelativo / tamBloco;
     }
+
+    /**
+     * Identifica o offset do endereço na página.
+     *
+     * @param endRelativo Endereço requisitado no programa.
+     * @param tamBloco Tamanho de um bloco no sistema em Bytes.
+     * @return Valor do offset dentro da página onde se encontra o endereço relativo.
+     */
+    public static int identificarOffsetEndereco(int endRelativo, int tamBloco) {
+        return endRelativo % tamBloco;
+    }
+
 }
